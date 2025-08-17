@@ -17,8 +17,6 @@ export default function Home() {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
-
     const { data, error } = await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,

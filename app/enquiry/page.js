@@ -6,16 +6,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { IoMdClose } from "react-icons/io";
 import { MdDownload } from "react-icons/md";
 
-
 import React, { useState, useEffect, useMemo } from "react";
-import { useCustomers } from "../hooks/useCustomers";
-import { useEnquiries } from "../hooks/useEnquiries";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import DataTable from "react-data-table-component";
 import { useForm } from "react-hook-form";
 import { TbEdit } from "react-icons/tb";
 import { FaRegTrashAlt } from "react-icons/fa";
+import useCustomers from "../hooks/useCustomers";
+import useEnquiries from "../hooks/useEnquiries";
 
 
 /**
@@ -33,7 +32,7 @@ const EnquirySchema = z.object({
     .min(3, "Description must be at least 3 characters"),
   priority: z.enum(["Low", "Medium", "High"], { required_error: "Priority is required" }),
   status: z.enum(["Open", "In Progress", "Closed"], { required_error: "Status is required" }),
-  expected_closure_date: z.string().optional().nullable(), // ISO date string (YYYY-MM-DD)
+  expected_closure_date: z.string().optional().nullable(),
 });
 
 function ConfirmDialog({ open, title, description, confirmText = "Confirm", cancelText = "Cancel", onConfirm, onCancel }) {
@@ -372,10 +371,8 @@ export default function Page() {
     enquiries,
     loading,
     error,
-    fetchEnquiries,
-    addEnquiry,
-    updateEnquiry,
-    deleteEnquiry,
+    setAllFilters ,
+    create, update, remove
   } = useEnquiries();
 
   const [filters, setFilters] = useState({
@@ -392,13 +389,15 @@ export default function Page() {
   const [confirm, setConfirm] = useState({ open: false, item: null });
 
   // ✅ Fetch enquiries whenever filters change
-  useEffect(() => {
-    fetchEnquiries(filters);
-  }, [filters, fetchEnquiries]);
+  // useEffect(() => {
+  //   fetchEnquiries(filters);
+  // }, [filters, fetchEnquiries]);
+
+  const applyFilters = () => setAllFilters(filters);
 
   // ✅ Create handler
   const handleCreate = async (values) => {
-    await addEnquiry({
+    await create({
       ...values,
       expected_closure_date: values.expected_closure_date || null,
     });
@@ -408,7 +407,7 @@ export default function Page() {
   // ✅ Update handler
   const handleUpdate = async (values) => {
     if (!editItem) return;
-    await updateEnquiry(editItem.id, {
+    await update(editItem.id, {
       ...values,
       expected_closure_date: values.expected_closure_date || null,
     });
@@ -423,7 +422,7 @@ export default function Page() {
 
   const confirmDelete = async () => {
     if (!confirm.item) return;
-    await deleteEnquiry(confirm.item.id);
+    await remove(confirm.item.id);
     setConfirm({ open: false, item: null });
   };
 
@@ -469,6 +468,12 @@ export default function Page() {
       <div className="mb-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <h1 className="text-2xl font-bold">Enquiries</h1>
         <div className="flex gap-2">
+          <button
+            className="rounded-xl border px-4 py-2 hover:bg-gray-50"
+            onClick={applyFilters}
+          >
+            Apply Filters
+          </button>
           <button
             className="rounded-xl border px-4 py-2 hover:bg-gray-50"
             onClick={() =>
