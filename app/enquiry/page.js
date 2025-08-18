@@ -15,6 +15,7 @@ import { TbEdit } from "react-icons/tb";
 import { FaRegTrashAlt } from "react-icons/fa";
 import useCustomers from "../hooks/useCustomers";
 import useEnquiries from "../hooks/useEnquiries";
+import Loader from "../components/Loader";
 
 
 /**
@@ -463,7 +464,10 @@ export default function Page() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl p-4 sm:p-6">
+    <>
+      {
+        loading ? <Loader /> : 
+        <div className="mx-auto max-w-7xl p-4 sm:p-6">
       {/* Header */}
       <div className="mb-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <h1 className="text-2xl font-bold">Enquiries</h1>
@@ -542,5 +546,7 @@ export default function Page() {
         confirmText="Delete"
       />
     </div>
+      }
+    </>
   );
 }
