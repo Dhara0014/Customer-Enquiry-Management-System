@@ -299,10 +299,12 @@ function EnquiryTable({ data, onEdit, onDelete, onExportPDF, loading }) {
       },
       {
         name: "Customer",
-        selector: (row) => {
-          return "-"
-        },
-        sortable: true,
+        selector: (row) =>
+        row.customers
+          ? `${row.customers.name}${row.customers.email ? ` (${row.customers.email})` : ""}`
+          : "—",
+      sortable: true,
+      wrap: true,
       },
       {
         name: "Priority",
@@ -394,7 +396,10 @@ export default function Page() {
   //   fetchEnquiries(filters);
   // }, [filters, fetchEnquiries]);
 
-  const applyFilters = () => setAllFilters(filters);
+  // const applyFilters = () => setAllFilters(filters);
+  useEffect(() => {
+    setAllFilters(filters);
+  }, [filters]);
 
   // ✅ Create handler
   const handleCreate = async (values) => {
@@ -472,12 +477,12 @@ export default function Page() {
       <div className="mb-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <h1 className="text-2xl font-bold">Enquiries</h1>
         <div className="flex gap-2">
-          <button
+          {/* <button
             className="rounded-xl border px-4 py-2 hover:bg-gray-50"
             onClick={applyFilters}
           >
             Apply Filters
-          </button>
+          </button> */}
           <button
             className="rounded-xl border px-4 py-2 hover:bg-gray-50"
             onClick={() =>
@@ -533,7 +538,7 @@ export default function Page() {
         }}
         onSubmit={(values) => (editItem ? handleUpdate(values) : handleCreate(values))}
         initialValues={editItem}
-        customers={customers}
+        customers={customers.filter(c => c.status === "Active")}
       />
 
       {/* Delete confirm */}

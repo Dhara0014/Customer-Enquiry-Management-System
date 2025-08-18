@@ -10,7 +10,7 @@ export default function useEnquiries(initialFilters = {} ) {
   const fetchEnquiries = async () => {
     setLoading(true);
     try {
-      const data = await getEnquiries(filters);
+      const data = await getEnquiries(allFilters);
       setEnquiries(data);
       setError(null);
     } catch (err) {
@@ -32,6 +32,7 @@ export default function useEnquiries(initialFilters = {} ) {
       }
     };
     fetchData();
+    fetchEnquiries();
   }, []);
 
   useEffect(() => {

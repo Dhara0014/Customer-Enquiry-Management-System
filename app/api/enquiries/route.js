@@ -8,18 +8,27 @@ export async function GET(req) {
 
     const status = searchParams.get("status");
     const search = searchParams.get("search");
-    const customerId = searchParams.get("customerId");
-    const dateFrom = searchParams.get("dateFrom");
-    const dateTo = searchParams.get("dateTo");
+    const priority = searchParams.get("priority");
+    const customerId = searchParams.get("customer_id");
+    const dateFrom = searchParams.get("from");
+    const dateTo = searchParams.get("to");
 
-    let query = supabase.from("enquiries").select("*").order("id", { ascending: true });
+    let query = supabase.from("enquiries").select("*, customers(name, email)").order("id", { ascending: true });
 
-    if (status && status !== "all") query = query.eq("status", status);
+    // if (status && status !== "all") query = query.eq("status", status);
+    // if (search) query = query.ilike("title", `%${search}%`);
+    // if (customerId) query = query.eq("customer_id", customerId);
+    // if (dateFrom && dateTo) {
+    //   query = query.gte("created_at", dateFrom).lte("created_at", dateTo);
+    // }
+
+    if (status) query = query.eq("status", status);
+    if (priority) query = query.eq("priority", priority);
     if (search) query = query.ilike("title", `%${search}%`);
     if (customerId) query = query.eq("customer_id", customerId);
-    if (dateFrom && dateTo) {
-      query = query.gte("created_at", dateFrom).lte("created_at", dateTo);
-    }
+
+    if (dateFrom) query = query.gte("created_at", dateFrom);
+    if (dateTo) query = query.lte("created_at", dateTo + "T23:59:59"); 
 
     const { data, error } = await query;
     if (error) throw error;
