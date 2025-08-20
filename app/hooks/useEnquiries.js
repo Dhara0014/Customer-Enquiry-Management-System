@@ -32,7 +32,7 @@ export default function useEnquiries(initialFilters = {} ) {
       }
     };
     fetchData();
-    fetchEnquiries();
+    // fetchEnquiries();
   }, []);
 
   useEffect(() => {
@@ -43,6 +43,7 @@ export default function useEnquiries(initialFilters = {} ) {
   const create = async (enquiry) => {
     try {
       const newEnquiry = await addEnquiry(enquiry);
+      // await fetchEnquiries();
       setEnquiries((prev) => [...prev, newEnquiry]);
     } catch (err) {
       setError(err.message || "Failed to add enquiry");
@@ -52,6 +53,7 @@ export default function useEnquiries(initialFilters = {} ) {
   const update = async (id, enquiry) => {
     try {
       const updated = await updateEnquiry(id, enquiry);
+      // await fetchEnquiries();
       setEnquiries((prev) =>
         prev.map((e) => (e.id === id ? updated : e))
       );
@@ -63,6 +65,7 @@ export default function useEnquiries(initialFilters = {} ) {
   const remove = async (id) => {
     try {
       await deleteEnquiry(id);
+      await fetchEnquiries();
       setEnquiries((prev) => prev.filter((e) => e.id !== id));
     } catch (err) {
       setError(err.message || "Failed to delete enquiry");

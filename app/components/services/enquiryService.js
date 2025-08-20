@@ -32,7 +32,10 @@ export async function getEnquiries(filters = {}) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(enquiry),
     });
-    if (!res.ok) throw new Error("Failed to update enquiry");
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to update enquiry: ${errorText}`);
+    }
     return res.json();
   }
   

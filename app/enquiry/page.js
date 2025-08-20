@@ -7,8 +7,8 @@ import { IoMdClose } from "react-icons/io";
 import { MdDownload } from "react-icons/md";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { jsPDF } from "jspdf";
-import "jspdf-autotable";
+import jsPDF  from "jspdf";
+import autoTable from "jspdf-autotable";
 import DataTable from "react-data-table-component";
 import { useForm } from "react-hook-form";
 import { TbEdit } from "react-icons/tb";
@@ -72,7 +72,7 @@ function EnquiryFormModal({ open, onClose, onSubmit, initialValues, customers })
       customer_id: "",
       title: "",
       description: "",
-      priority: "Medium",
+      priority: "Low",
       status: "Open",
       expected_closure_date: "",
     },
@@ -83,7 +83,7 @@ function EnquiryFormModal({ open, onClose, onSubmit, initialValues, customers })
       customer_id: "",
       title: "",
       description: "",
-      priority: "Medium",
+      priority: "Low",
       status: "Open",
       expected_closure_date: "",
     });
@@ -123,7 +123,7 @@ function EnquiryFormModal({ open, onClose, onSubmit, initialValues, customers })
               <option value="">Select customer…</option>
               {customers.map((c) => (
                 <option key={c.id} value={String(c.id)}>
-                  {c.name} {c.email ? `(${c.email})` : ""}
+                  {c.name}
                 </option>
               ))}
             </select>
@@ -391,37 +391,36 @@ export default function Page() {
   const [editItem, setEditItem] = useState(null);
   const [confirm, setConfirm] = useState({ open: false, item: null });
 
-  // ✅ Fetch enquiries whenever filters change
-  // useEffect(() => {
-  //   fetchEnquiries(filters);
-  // }, [filters, fetchEnquiries]);
-
-  // const applyFilters = () => setAllFilters(filters);
   useEffect(() => {
     setAllFilters(filters);
   }, [filters]);
 
-  // ✅ Create handler
   const handleCreate = async (values) => {
-    await create({
-      ...values,
-      expected_closure_date: values.expected_closure_date || null,
-    });
-    setShowForm(false);
+    try {
+      await create({
+        ...values,
+        expected_closure_date: values?.expected_closure_date || null,
+      });
+      setShowForm(false);
+    } catch (error) {
+      alert(error)
+    }
   };
 
-  // ✅ Update handler
   const handleUpdate = async (values) => {
     if (!editItem) return;
-    await update(editItem.id, {
-      ...values,
-      expected_closure_date: values.expected_closure_date || null,
-    });
-    setShowForm(false);
-    setEditItem(null);
+    try {
+      await update(editItem.id, {
+        ...values,
+        expected_closure_date: values?.expected_closure_date || null,
+      });
+      setShowForm(false);
+      setEditItem(null);
+    } catch (error) {
+      alert(error)
+    }
   };
 
-  // ✅ Delete handler
   const handleDelete = async (item) => {
     setConfirm({ open: true, item });
   };
@@ -432,7 +431,6 @@ export default function Page() {
     setConfirm({ open: false, item: null });
   };
 
-  // ✅ Export to PDF
   const handleExportPDF = (row) => {
     const doc = new jsPDF();
 
@@ -449,7 +447,7 @@ export default function Page() {
       ["Created", new Date(row.created_at).toLocaleString()],
     ];
 
-    doc.autoTable({
+    autoTable(doc, {
       head: [["Field", "Value"]],
       body: lines,
       startY: 22,
@@ -473,16 +471,9 @@ export default function Page() {
       {
         loading ? <Loader /> : 
         <div className="mx-auto max-w-7xl p-4 sm:p-6">
-      {/* Header */}
       <div className="mb-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <h1 className="text-2xl font-bold">Enquiries</h1>
         <div className="flex gap-2">
-          {/* <button
-            className="rounded-xl border px-4 py-2 hover:bg-gray-50"
-            onClick={applyFilters}
-          >
-            Apply Filters
-          </button> */}
           <button
             className="rounded-xl border px-4 py-2 hover:bg-gray-50"
             onClick={() =>
@@ -500,12 +491,10 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Filters */}
       <div className="mb-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
         <EnquiryFilters filters={filters} onChange={setFilters} customers={customers} />
       </div>
 
-      {/* Table */}
       <div className="rounded-2xl border border-gray-200 bg-white p-2 shadow-sm">
         <EnquiryTable
           data={enquiries}
@@ -529,19 +518,19 @@ export default function Page() {
         />
       </div>
 
-      {/* Create / Edit Modal */}
       <EnquiryFormModal
         open={showForm}
         onClose={() => {
           setShowForm(false);
           setEditItem(null);
         }}
-        onSubmit={(values) => (editItem ? handleUpdate(values) : handleCreate(values))}
+        onSubmit={(values) => {
+          return (editItem ? handleUpdate(values) : handleCreate(values))
+        } }
         initialValues={editItem}
         customers={customers.filter(c => c.status === "Active")}
       />
 
-      {/* Delete confirm */}
       <ConfirmDialog
         open={confirm.open}
         title="Delete Enquiry"

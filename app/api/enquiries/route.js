@@ -13,14 +13,7 @@ export async function GET(req) {
     const dateFrom = searchParams.get("from");
     const dateTo = searchParams.get("to");
 
-    let query = supabase.from("enquiries").select("*, customers(name, email)").order("id", { ascending: true });
-
-    // if (status && status !== "all") query = query.eq("status", status);
-    // if (search) query = query.ilike("title", `%${search}%`);
-    // if (customerId) query = query.eq("customer_id", customerId);
-    // if (dateFrom && dateTo) {
-    //   query = query.gte("created_at", dateFrom).lte("created_at", dateTo);
-    // }
+    let query = supabase.from("enquiries").select("*, customers(id, name, email)").order("id", { ascending: true });
 
     if (status) query = query.eq("status", status);
     if (priority) query = query.eq("priority", priority);
@@ -42,7 +35,8 @@ export async function GET(req) {
 // POST add enquiry
 export async function POST(req) {
   const body = await req.json();
-  const { data, error } = await supabase.from("enquiries").insert(body).select();
+  const { data, error } = await supabase.from("enquiries").insert(body).select(`*, customers (id, name, email)`)
+  .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-  return NextResponse.json(data[0]);
+  return NextResponse.json(data);
 }
