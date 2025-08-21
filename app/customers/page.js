@@ -116,30 +116,33 @@ const page = () => {
   if (error) return <p className="p-6 text-red-500">Error: {error.message || error}</p>;
 
   return (
-    <>
-      {
-      loading ? <Loader /> : <div className="p-6">
+      <div className="mx-auto max-w-7xl p-4 sm:p-6">
+      <div className="mb-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+        <h1 className="text-2xl font-bold">Customers</h1>
+        <div className="flex gap-2">
+          <button
+            className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+            onClick={handleAdd}
+          >
+            + New Customer
+          </button>
+        </div>
+      </div>
       {/* Search & Add */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="mb-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
         <input
           type="text"
           placeholder="Search customers..."
           value={search}
           onChange={(e) => handleSearch(e.target.value)}
-          className="border p-2 rounded w-1/3"
+          className="border border-gray-300 p-2 rounded-2xl w-1/3 px-3 py-2"
         />
-        <button
-          onClick={handleAdd}
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Add Customer
-        </button>
       </div>
 
       {/* Table */}
-      <div className="rounded-xl shadow-md p-2 w-full">
-        <TableComponent columns={columns} filteredCustomers={filteredCustomers} />
-      </div>
+      {loading ? <Loader /> : <div className="rounded-xl shadow-md p-2 w-full">
+        <TableComponent columns={columns} filteredCustomers={filteredCustomers} loading={loading} />
+      </div>}
 
       {/* Add/Edit Modal */}
       {showModal && (
@@ -213,8 +216,7 @@ const page = () => {
         </div>
       )}
     </div>
-    }
-    </>
+    
   );
 };
 
