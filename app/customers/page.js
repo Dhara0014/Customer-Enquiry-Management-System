@@ -112,7 +112,6 @@ const page = () => {
     setFilteredCustomers(customers);
   }, [customers]);
 
-  // if (loading) return <p className="p-6">Loading...</p>;
   if (error) return <p className="p-6 text-red-500">Error: {error.message || error}</p>;
 
   return (
@@ -128,7 +127,6 @@ const page = () => {
           </button>
         </div>
       </div>
-      {/* Search & Add */}
       <div className="mb-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
         <input
           type="text"
@@ -139,12 +137,10 @@ const page = () => {
         />
       </div>
 
-      {/* Table */}
       {loading ? <Loader /> : <div className="rounded-xl shadow-md p-2 w-full">
         <TableComponent columns={columns} filteredCustomers={filteredCustomers} loading={loading} />
       </div>}
 
-      {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center">
           <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
@@ -191,7 +187,6 @@ const page = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {deleteConfirm !== null && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center">
           <div className="bg-white rounded-lg p-6 w-80 shadow-lg text-center">

@@ -1,13 +1,12 @@
 "use client";
-import { useEffect } from "react";
 import Loader from "../components/Loader";
 import useCustomers from "../hooks/useCustomers";
 import useEnquiries from "../hooks/useEnquiries";
 
 export default function DashboardPage() {
 
-  const { customers, loading: loadingCustomers, error: errorCustomers, create: createCustomer } = useCustomers();
-  const { enquiries, loading: loadingEnquiries, error: errorEnquiries, create: createEnquiry } = useEnquiries();
+  const { customers, loading: loadingCustomers } = useCustomers();
+  const { enquiries, loading: loadingEnquiries } = useEnquiries();
 
 
   return (

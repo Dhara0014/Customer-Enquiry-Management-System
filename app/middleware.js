@@ -9,11 +9,9 @@ export async function middleware(req) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  // Redirect if not logged in
   if (!session && !req.nextUrl.pathname.startsWith("/")) {
     return NextResponse.redirect(new URL("/", req.url));
   }
-
   return res;
 }
 

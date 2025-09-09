@@ -33,12 +33,9 @@ export default function Home() {
     
     <div className="min-h-screen flex items-center justify-center  px-4">
       <div className="bg-white/10  backdrop-blur-lg p-16 rounded-2xl shadow-2xl w-full max-w-lg">
-        {/* App Name */}
         <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Customer Enquiry Manager</h1>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email */}
           <div>
             <label className="block text-gray-600 text-sm mb-1">Email</label>
             <input
@@ -52,7 +49,6 @@ export default function Home() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="block text-gray-600 text-sm mb-1">Password</label>
             <input
@@ -66,7 +62,6 @@ export default function Home() {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-blue-500/50"
@@ -75,7 +70,6 @@ export default function Home() {
           </button>
         </form>
 
-        {/* Footer */}
         <p className="text-center text-gray-400 text-sm mt-6">
           Don’t have an account?{" "}
           <a href="/signup" className="text-blue-400 hover:underline">

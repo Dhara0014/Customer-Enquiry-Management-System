@@ -14,21 +14,19 @@ export default function Navbar({children}) {
   const sidebarRef = useRef();
   const route = useRouter();
 
-  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) {
         setProfileOpen(false);
       }
       if (sidebarRef.current && !sidebarRef.current.contains(e.target) && !e.target.closest("#sidebar-btn")) {
-        if (window.innerWidth < 1024) setSidebarOpen(false); // only close on small screens
+        if (window.innerWidth < 1024) setSidebarOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Always open sidebar on large screens
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -50,13 +48,12 @@ export default function Navbar({children}) {
 
   return (
     <div className="flex">
-      {/* Sidebar */}
       <div
         ref={sidebarRef}
         className={`fixed lg:static top-0 left-0 h-lvh bg-gray-800 text-white max-w-100 p-10 transition-transform duration-300 z-40 
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
-        <h2 className="text-xl font-bold mb-4">Customer Management App</h2>
+        <h2 className="text-xl font-bold mb-4 cursor-pointer " onClick={() => route.push("/dashboard")} >Customer Management App</h2>
         <ul>
           <li className="mb-2"><a href="/dashboard" className="hover:underline">Dashboard</a></li>
           <li className="mb-2"><a href="/customers" className="hover:underline">Customers</a></li>
@@ -64,24 +61,17 @@ export default function Navbar({children}) {
         </ul>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1">
-        {/* Navbar */}
         <nav className="flex items-center justify-between bg-gray-900 text-white px-4 py-5 shadow-md">
-          {/* Hamburger Menu for small screens */}
           <button
             id="sidebar-btn"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="text-2xl lg:hidden"
           >
-            {/* ☰ */}
             <MdMenu />
           </button>
 
-          {/* App Name */}
           <h1 className="text-lg font-bold"></h1>
-
-          {/* Profile */}
           <div className="relative" ref={profileRef}>
             <CgProfile
               className="text-3xl cursor-pointer"
@@ -97,11 +87,7 @@ export default function Navbar({children}) {
           </div>
         </nav>
 
-        {/* Page Content */}
         <div className="p-4">
-          {/* <h2 className="text-2xl">Welcome to My App</h2>
-          <p>This is your main content area.</p> */}
-
           {children}
         </div>
       </div>

@@ -2,30 +2,13 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { TbEdit } from "react-icons/tb";
 import { useForm } from "react-hook-form";
 import DataTable from "react-data-table-component";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { IoMdClose } from "react-icons/io";
 import { MdDownload } from "react-icons/md";
 import { useEffect, useMemo } from "react";
+import { EnquirySchema } from "./EnquirySchema";
 
-/**
- * Enquiry Schema (zod)
- */
-const EnquirySchema = z.object({
-    id: z.number().optional(),
-    customer_id: z.string({ required_error: "Customer is required" }).min(1, "Customer is required"),
-    title: z
-      .string({ required_error: "Title is required" })
-      .min(3, "Title must be at least 3 characters")
-      .max(120, "Title must be under 120 characters"),
-    description: z
-      .string({ required_error: "Description is required" })
-      .min(3, "Description must be at least 3 characters"),
-    priority: z.enum(["Low", "Medium", "High"], { required_error: "Priority is required" }),
-    status: z.enum(["Open", "In Progress", "Closed"], { required_error: "Status is required" }),
-    expected_closure_date: z.string().optional(),
-  });
+
   
   export function ConfirmDialog({ open, title, description, confirmText = "Confirm", cancelText = "Cancel", onConfirm, onCancel }) {
     if (!open) return null;
@@ -47,9 +30,6 @@ const EnquirySchema = z.object({
     );
   }
   
-  // /**
-  //  * Enquiry Form Modal (Create / Edit) with zod validation
-  //  */
   export function EnquiryFormModal({ open, onClose, onSubmit, initialValues, customers }) {
     
     const {
@@ -86,7 +66,6 @@ const EnquirySchema = z.object({
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
         <div className="relative max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl animate-fadeIn">
           
-          {/* Header */}
           <div className="flex items-center justify-between border-b px-6 py-4">
             <h2 className="text-lg font-semibold text-gray-800">
               {initialValues?.id ? "Edit Enquiry" : "Create Enquiry"}
@@ -99,10 +78,8 @@ const EnquirySchema = z.object({
             </button>
           </div>
   
-          {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-5 space-y-5">
             
-            {/* Customer */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Customer</label>
               <select
@@ -124,7 +101,6 @@ const EnquirySchema = z.object({
               )}
             </div>
   
-            {/* Title */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
               <input
@@ -139,7 +115,6 @@ const EnquirySchema = z.object({
               {errors.title && <p className="mt-1 text-xs text-red-600">{errors.title.message}</p>}
             </div>
   
-            {/* Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
               <textarea
@@ -156,7 +131,6 @@ const EnquirySchema = z.object({
               )}
             </div>
   
-            {/* Priority & Status */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
@@ -185,7 +159,6 @@ const EnquirySchema = z.object({
               </div>
             </div>
   
-            {/* Expected Closure Date */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Expected Closure Date</label>
               <input
@@ -198,7 +171,6 @@ const EnquirySchema = z.object({
               />
             </div>
   
-            {/* Actions */}
             <div className="flex justify-end gap-3 pt-3 border-t">
               <button
                 type="button"
@@ -221,9 +193,6 @@ const EnquirySchema = z.object({
     );
   }
   
-  // /**
-  //  * Filters panel (reusable)
-  //  */
   export function EnquiryFilters({ filters, onChange, customers }) {
     return (
       <div className="grid grid-cols-2 gap-3 md:grid-cols-6">
@@ -282,9 +251,6 @@ const EnquirySchema = z.object({
     );
   }
   
-  // /**
-  //  * Table wrapper (react-data-table-component)
-  //  */
   export function EnquiryTable({ data, onEdit, onDelete, onExportPDF, loading }) {
     const customStyles = {
         rows: {
@@ -364,8 +330,6 @@ const EnquirySchema = z.object({
             </div>
           ),
           ignoreRowClick: true,
-          // allowOverflow: true,
-          // button: true,
         },
       ],
       [onDelete, onEdit, onExportPDF]
@@ -379,8 +343,6 @@ const EnquirySchema = z.object({
         customStyles={customStyles}
         pagination
         highlightOnHover
-        // dense
-        // persistTableHead
       />
     );
   }

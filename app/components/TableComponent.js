@@ -24,36 +24,9 @@ const TableComponent = ({columns, filteredCustomers, loading}) => {
             paddingRight: "12px",
             fontSize: "15px",
           },
-        },
-        // pagination: {
-        //   style: {
-        //     border: "2px solid red",
-        //     borderTop: "1px solid #e5e7eb",
-        //     backgroundColor: "#fff",
-        //     borderBottomLeftRadius: "0.75rem",
-        //     borderBottomRightRadius: "0.75rem",
-        //     padding: "10px 16px",
-        //     justifyContent: "flex-end",
-        //   },
-        //   pageButtonsStyle: {
-        //     borderRadius: "6px",
-        //     height: "32px",
-        //     width: "32px",
-        //     padding: "4px",
-        //     margin: "0 4px",
-        //     cursor: "pointer",
-        //     transition: "all 0.2s",
-        //     "&:hover:not(:disabled)": {
-        //       backgroundColor: "#f3f4f6",
-        //     },
-        //     "&:disabled": {
-        //       cursor: "not-allowed",
-        //       opacity: 0.5,
-        //     },
-        //   },
-        // },
-        
+        },        
       };
+      
   return (
     <DataTable
         columns={columns}

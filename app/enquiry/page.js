@@ -33,7 +33,7 @@ export default function Page() {
 useEffect(() => {
   const handler = setTimeout(() => {
     setDebouncedSearch(filters.search);
-  }, 500); // 0.5s delay only for typing search
+  }, 500);
 
   return () => clearTimeout(handler);
 }, [filters.search]);
@@ -43,14 +43,10 @@ useEffect(() => {
   const [editItem, setEditItem] = useState(null);
   const [confirm, setConfirm] = useState({ open: false, item: null });
 
-  // useEffect(() => {
-  //   setAllFilters(filters);
-  // }, [filters]);
-
   useEffect(() => {
     setAllFilters({
       ...filters,
-      search: debouncedSearch, // only search is delayed
+      search: debouncedSearch,
     });
   }, [debouncedSearch, filters.status, filters.priority, filters.customer_id, filters.from, filters.to]);
 
@@ -170,7 +166,6 @@ useEffect(() => {
                 ? row.expected_closure_date.substring(0, 10)
                 : "",
             });
-            // handleUpdate(row)
             setShowForm(true);
           }}
           onDelete={handleDelete}
